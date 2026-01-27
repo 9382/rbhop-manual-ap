@@ -1,0 +1,121 @@
+{
+    "$schema": "https://raw.githubusercontent.com/ManualForArchipelago/Manual/main/schemas/Manual.options.schema.json",
+    "_comment": "Add a _ before an option name to comment it out and it wont be added to the apworld",
+    "core": {
+        "goal": {
+            "description": [
+                "The win condition",
+                "any highest: Beat any map from your highest tier",
+                "all highest: Beat all the maps from your highest tier",
+                "all: Beat all the maps from all your tiers"
+            ],
+            "hidden": false
+        },
+        "death_link": {
+            "description": [
+                "Enables honor-based deathlink",
+                "Receiving a deathlink means resetting the current run (/r)",
+                "Sending a deathlink is optional, but 'failing X times in a run' is a recommended condition"
+            ],
+            "default": false
+        },
+        "_filler_traps": {
+            "_comment": "Using values here let you set a 'recommended' filler_trap percentage or even a default percentage",
+            "values": {
+                "recommended": 20
+            }
+        }
+    },
+    "user": {
+        "tiers": {
+            "type": "Choice",
+            "description": [
+                "The tiers of maps to be added to the pool",
+                "Format: LowerTier-HigherTier (or just LowerTier), E.g. 't1-t2' or 't3'",
+                "Tier 1 (162 maps): Super easy maps that take little effort (Brick, Lemon)",
+                "Tier 2 (140 maps): Still simple, but not trivial (Royalty, Adventure V2)",
+                "Tier 3 (123 maps): Longer maps with proper platforming (Technicolor, Patent)",
+                "Tier 4 ( 51 maps): Even longer, more involved maps that require skill (Arcane V2, RPG)",
+                "Tier 5 ( 24 maps): Proper accuracy maps, from VLM/Dracula to Badges2/Sqee",
+                "Tier 6 (  4 maps): The hardest maps available"
+            ],
+            "values": {
+                "t1": "t1",
+                "t1-t3": "t1-t3",
+                "t2-t4": "t2-t4",
+                "t3-t5": "t3-t5",
+                "t4-t5": "t4-t5",
+                "t5": "t5",
+                "t4-t6": "t4-t6"
+            },
+            "default": "t1-t3",
+            "allow_custom_value": true
+        },
+        "percentage_included": {
+            "type": "Range",
+            "description": [
+                "Only include a certain percentage of maps from the tiers above",
+                "Helpful if you don't want to run every accuracy map in the game or all 200+ strafe maps"
+            ],
+            "range_start": 1,
+            "range_end": 100,
+            "default": 100
+        },
+
+        "enable_meme_maps": {
+            "type": "Toggle",
+            "description": [
+                "Allows 'Meme' maps to be added to the pool",
+                "This covers stupid, long, and gimmick maps, like Lazy Larry or Ka-Chow!",
+                "Meme maps still need their associated tier enabled to be added",
+                "This applies to 7 maps"
+            ],
+            "default": false
+        },
+        "enable_tedious_maps": {
+            "type": "Toggle",
+            "description": [
+                "Allows 'Tedious' maps to be added to the pool",
+                "This covers maps that focus on a super specific skill set or have very few checkpoints, like Plink, :3, or Trials",
+                "Tedious maps still need their associated tier enabled to be added",
+                "This applies to 7 maps"
+            ],
+            "default": false
+        },
+
+        "starting_maps": {
+            "type": "Range",
+            "description": "How many maps start unlocked from the beginning",
+            "range_start": 0,
+            "range_end": 50,
+            "default": 5
+        },
+        "progressive_tiers": {
+            "type": "Toggle",
+            "description": [
+                "Adds a progressive lock to tiers",
+                "This ensures higher tier maps only become playable later into the run",
+                "Maps will still be unlocked individually"
+            ],
+            "default": true
+        },
+        "no_fail_checks": {
+            "type": "Choice",
+            "description": [
+                "Enables an extra 'No-Fail' check on maps in the specified tiers",
+                "Format: LowerTier-HigherTier (or just LowerTier), E.g. 't1-t2' or 't3'",
+                "Set to 'off' to disable these checks entirely"
+            ],
+            "values": {
+                "off": "off",
+                "t1": "t1",
+                "t1-t2": "t1-t2",
+                "t1-t3": "t1-t3",
+                "t2-t3": "t2-t3",
+                "t2-t4": "t2-t4"
+            },
+            "default": "off",
+            "allow_custom_value": true
+        }
+    }
+}

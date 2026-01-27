@@ -1,0 +1,12 @@
+{
+  "$schema": "https://github.com/ManualForArchipelago/Manual/raw/main/schemas/Manual.game.schema.json",
+  "game": "Roblox Bhop",
+  "creator": "aidan9382",
+  "filler_item_name": "Edgeboost",
+  "starting_items": [
+    {"items": ["Progressive Tier"], "random": 1},
+    {"item_categories": ["Tier 1"], "random": 1}
+  ],
+  "death_link": true,
+  "starting_index": 1
+}

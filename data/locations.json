@@ -1,0 +1,24 @@
+{
+	"$schema": "https://github.com/ManualForArchipelago/Manual/raw/main/schemas/Manual.locations.schema.json",
+    "data": [
+        {
+            "name": "Any Highest",
+            "victory": true,
+            "category": ["Victory"],
+            "requires": "|Progressive Tier:all|"
+        },
+        {
+            "name": "All Highest",
+            "victory": true,
+            "category": ["Victory"],
+            "requires": "|Progressive Tier:all|"
+        },
+        {
+            "name": "All",
+            "victory": true,
+            "category": ["Victory"],
+            "requires": "|@Maps:all| and |Progressive Tier:all|"
+        }
+    ]
+}
+
