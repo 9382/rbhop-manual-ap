@@ -69,7 +69,7 @@ def after_create_regions(world: World, multiworld: MultiWorld, player: int):
         if T and T.isdigit() and (int(T) < low or int(T) > high):
             data["hidden"] = True
             count += 1
-    logging.info(f"Hidden {count} categories")
+    logging.debug(f"Hidden {count} categories")
     no_fail = world.options.no_fail_checks.value
     nf_low, nf_high = 0, 0
     if no_fail != "off":
@@ -93,7 +93,7 @@ def after_create_regions(world: World, multiworld: MultiWorld, player: int):
                     if T and T.isdigit() and (int(T) < nf_low or int(T) > nf_high):
                         region.locations.remove(location)
                         count += 1
-    logging.info(f"Removed {count} locations")
+    logging.debug(f"Removed {count} locations")
 
 # This hook allows you to access the item names & counts before the items are created. Use this to increase/decrease the amount of a specific item in the pool
 # Valid item_config key/values:
@@ -128,7 +128,7 @@ def before_create_items_all(item_config: dict[str, int|dict], world: World, mult
                 item_config[Map] = 0
                 count += 1
 
-    logging.info(f"Removed {count} items")
+    logging.debug(f"Removed {count} items")
 
     percent = world.options.percentage_included.value
     if percent < 100:
@@ -153,7 +153,7 @@ def before_create_items_all(item_config: dict[str, int|dict], world: World, mult
                     if location.name.split(" - ")[0] in culled:
                         region.locations.remove(location)
                         culled2 += 1
-        logging.info(f"Culled {len(culled)} items and {culled2} locations")
+        logging.debug(f"Culled {len(culled)} items and {culled2} locations")
     return item_config
 
 # The item pool before starting items are processed, in case you want to see the raw item pool at that stage
