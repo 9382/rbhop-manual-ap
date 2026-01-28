@@ -105,9 +105,11 @@ def after_create_regions(world: World, multiworld: MultiWorld, player: int):
 #       will create 5 items that are the "useful trap" class
 # {"Item Name": {ItemClassification.useful: 5}} <- You can also use the classification directly
 def before_create_items_all(item_config: dict[str, int|dict], world: World, multiworld: MultiWorld, player: int) -> dict[str, int|dict]:
+    low, high = ParseTier(world.options.tiers.value)
     if not world.options.progressive_tiers.value:
         item_config["Progressive Tier"] = 0
-    low, high = ParseTier(world.options.tiers.value)
+    else:
+        item_config["Progressive Tier"] = high - 1
     count = 0
     for t in range(len(Tiers)):
         T = t+1
