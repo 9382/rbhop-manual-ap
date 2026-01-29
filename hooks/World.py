@@ -48,29 +48,11 @@ def before_generate_early(world: World, multiworld: MultiWorld, player: int) -> 
 
 # Called before regions and locations are created. Not clear why you'd want this, but it's here. Victory location is included, but Victory event is not placed yet.
 def before_create_regions(world: World, multiworld: MultiWorld, player: int):
-    low, high = ParseTier(world.options.tiers.value)
-    world.location_table = world.location_table.copy() # Just in case
-    for i in range(len(world.location_table)):
-        world.location_table[i] = world.location_table[i].copy()
-    for location in world.location_table:
-        name = location["name"]
-        if name == "All Highest":
-            location["requires"] = f"|@Tier {high}:all| and |Progressive Tier:all|"
-
+    pass
 
 # Called after regions and locations are created, in case you want to see or modify that information. Victory location is included.
 def after_create_regions(world: World, multiworld: MultiWorld, player: int):
     low, high = ParseTier(world.options.tiers.value)
-    world.category_table = world.category_table.copy() # Just in case
-    for key in world.category_table.keys():
-        world.category_table[key] = world.category_table[key].copy()
-    count = 0
-    for category, data in world.category_table.items():
-        T = category.startswith("Tier ") and category[-1]
-        if T and T.isdigit() and (int(T) < low or int(T) > high):
-            data["hidden"] = True
-            count += 1
-    logging.debug(f"Hidden {count} categories")
     no_fail = world.options.no_fail_checks.value
     nf_low, nf_high = 0, 0
     if no_fail != "off":
@@ -106,9 +88,7 @@ def after_create_regions(world: World, multiworld: MultiWorld, player: int):
 # {"Item Name": {ItemClassification.useful: 5}} <- You can also use the classification directly
 def before_create_items_all(item_config: dict[str, int|dict], world: World, multiworld: MultiWorld, player: int) -> dict[str, int|dict]:
     low, high = ParseTier(world.options.tiers.value)
-    if not world.options.progressive_tiers.value:
-        item_config["Progressive Tier"] = 0
-    else:
+    if world.options.progressive_tiers.value:
         item_config["Progressive Tier"] = high - 1
     count = 0
     for t in range(len(Tiers)):
@@ -173,7 +153,7 @@ def before_create_items_starting(item_pool: list, world: World, multiworld: Mult
         starting_items[1]["item_categories"] = [f"Tier {low}"]
         starting_items[1]["random"] = item_count
     else:
-        starting_items[0]["random"] = 0
+        starting_items[0]["random"] = 5
         item_count = min(world.options.starting_maps.value, len(item_table))
         starting_items[1]["item_categories"] = [f"Tier {low}"]
         starting_items[1]["random"] = item_count
