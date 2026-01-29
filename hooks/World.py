@@ -155,7 +155,7 @@ def before_create_items_starting(item_pool: list, world: World, multiworld: Mult
     else:
         starting_items[0]["random"] = 5
         item_count = min(world.options.starting_maps.value, len(item_table))
-        starting_items[1]["item_categories"] = [f"Tier {low}"]
+        starting_items[1]["item_categories"] = ["Maps"]
         starting_items[1]["random"] = item_count
     return item_pool
 
