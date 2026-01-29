@@ -10,6 +10,8 @@ from ..Locations import ManualLocation
 #          data/game.json, data/items.json, data/locations.json, data/regions.json
 #
 from ..Data import game_table, item_table, location_table, region_table
+
+# Used to hot-wire starting items (a bit messy)
 from ..Game import starting_items
 
 # These helper methods allow you to determine if an option has been set, or what its value is, for any player in the multiworld
@@ -19,6 +21,7 @@ from ..Helpers import is_option_enabled, get_option_value, format_state_prog_ite
 import logging
 
 from .BhopData import Tiers, Meme, Tedious, ParseTier, MapToTier
+from random import Random # For consistent map culling
 
 ########################################################################################
 ## Order of method calls when the world generates:
@@ -44,7 +47,14 @@ def before_generate_early(world: World, multiworld: MultiWorld, player: int) -> 
     This is the earliest hook called during generation, before anything else is done.
     Use it to check or modify incompatible options, or to set up variables for later use.
     """
-    pass
+    if hasattr(world.multiworld, "re_gen_passthrough"):
+        # Make sure Universal Tracker has consistent behaviour
+        slot_data = world.multiworld.re_gen_passthrough.get(world.game, {})
+        world.map_culling_seed = slot_data.get("map_culling_seed")
+        assert world.map_culling_seed != None, "Failed to find map culling seed"
+    else:
+        world.map_culling_seed = world.random.getrandbits(64)
+    logging.debug(f"map_culling_seed: {world.map_culling_seed}")
 
 # Called before regions and locations are created. Not clear why you'd want this, but it's here. Victory location is included, but Victory event is not placed yet.
 def before_create_regions(world: World, multiworld: MultiWorld, player: int):
@@ -115,20 +125,23 @@ def before_create_items_all(item_config: dict[str, int|dict], world: World, mult
 
     percent = world.options.percentage_included.value
     if percent < 100:
+        random = Random(world.map_culling_seed)
         mult = 1-(percent/100)
         culled = []
         maps_by_tier = {1: [], 2: [], 3: [], 4: [], 5: [], 6: []}
         for key, value in item_config.items():
-            if value != 0 and key != "Progressive Tier" and key in MapToTier:
+            if value != 0 and key in MapToTier:
                 maps_by_tier[MapToTier[key]].append(key)
         for i in range(1, 7):
             maps = maps_by_tier[i]
             if len(maps) > 0:
+                maps.sort() # Dictionary-iterated array is probably not a consistant thing, so make it consistant
                 for _ in range(min(round(len(maps)*mult), len(maps)-1)):
-                    removed = maps.pop(world.random.randint(0, len(maps)-1))
+                    removed = maps.pop(random.randint(0, len(maps)-1))
                     assert item_config.get(removed, 0) > 0, "bad culling"
                     item_config[removed] = 0
                     culled.append(removed)
+
         culled2 = 0
         for region in multiworld.regions:
             if region.player == player:
@@ -247,6 +260,7 @@ def after_remove_item(world: World, state: CollectionState, Changed: bool, item:
 
 # This is called before slot data is set and provides an empty dict ({}), in case you want to modify it before Manual does
 def before_fill_slot_data(slot_data: dict, world: World, multiworld: MultiWorld, player: int) -> dict:
+    slot_data["map_culling_seed"] = world.map_culling_seed
     return slot_data
 
 # This is called after slot data is set and provides the slot data at the time, in case you want to check and modify it after Manual is done with it
