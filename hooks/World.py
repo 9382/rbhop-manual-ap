@@ -193,23 +193,24 @@ def before_set_rules(world: World, multiworld: MultiWorld, player: int):
 
 # Called after rules for accessing regions and locations are created, in case you want to see or modify that information.
 def after_set_rules(world: World, multiworld: MultiWorld, player: int):
-    # Use this hook to modify the access rules for a given location
+    low, high = ParseTier(world.options.tiers.value)
 
-    def Example_Rule(state: CollectionState) -> bool:
-        # Calculated rules take a CollectionState object and return a boolean
-        # True if the player can access the location
-        # CollectionState is defined in BaseClasses
-        return True
+    expected = 0
+    for item_name, count in world.item_counts[player].items():
+        item = world.item_name_to_item[item_name]
+        if "category" in item and f"Tier {high}" in item["category"]:
+            expected += count
+    logging.debug(f"Expected item count at tier {high}: {expected}")
 
-    ## Common functions:
-    # location = world.get_location(location_name, player)
-    # location.access_rule = Example_Rule
+    all_highest = multiworld.regions.location_cache[player].get("All Highest")
+    if all_highest:
+        old = all_highest.access_rule
+        all_highest.access_rule = lambda state: old(state) and state.has_group(f"Tier {high}", player, expected)
 
-    ## Combine rules:
-    # old_rule = location.access_rule
-    # location.access_rule = lambda state: old_rule(state) and Example_Rule(state)
-    # OR
-    # location.access_rule = lambda state: old_rule(state) or Example_Rule(state)
+    any_highest = multiworld.regions.location_cache[player].get("Any Highest")
+    if any_highest:
+        old = any_highest.access_rule
+        any_highest.access_rule = lambda state: old(state) and state.has_group(f"Tier {high}", player, 1)
 
 # The item name to create is provided before the item is created, in case you want to make changes to it
 def before_create_item(item_name: str, world: World, multiworld: MultiWorld, player: int) -> str:
