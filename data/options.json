@@ -32,11 +32,11 @@
             "description": [
                 "The tiers of maps to be added to the pool",
                 "Format: LowerTier-HigherTier (or just LowerTier), E.g. 't1-t2' or 't3'",
-                "Tier 1 (162 maps): Super easy maps that take little effort (Brick, Lemon)",
-                "Tier 2 (140 maps): Still simple, but not trivial (Royalty, Adventure V2)",
-                "Tier 3 (123 maps): Longer maps with proper platforming (Technicolor, Patent)",
-                "Tier 4 ( 51 maps): Even longer, more involved maps that require skill (Arcane V2, RPG)",
-                "Tier 5 ( 24 maps): Proper accuracy maps, from VLM/Dracula to Badges2/Sqee",
+                "Tier 1 (165 maps): Super easy maps that take little effort (Brick, Lemon)",
+                "Tier 2 (139 maps): Still simple, but not trivial (Royalty, Adventure V2)",
+                "Tier 3 (124 maps): Longer maps with proper platforming (Technicolor, Patent)",
+                "Tier 4 ( 49 maps): Even longer, more involved maps that require skill (Arcane V2, RPG)",
+                "Tier 5 ( 25 maps): Proper accuracy maps, from VLM/Dracula to Badges2/Sqee",
                 "Tier 6 (  4 maps): The hardest maps available"
             ],
             "values": {
@@ -78,7 +78,7 @@
                 "Allows 'Tedious' maps to be added to the pool",
                 "This covers maps that focus on a super specific skill set or have very few checkpoints, like Plink, :3, or Trials",
                 "Tedious maps still need their associated tier enabled to be added",
-                "This applies to 7 maps"
+                "This applies to 8 maps"
             ],
             "default": false
         },
