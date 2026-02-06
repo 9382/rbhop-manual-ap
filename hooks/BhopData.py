@@ -37,12 +37,19 @@ def ParseTier(text):
 for t in range(len(Tiers)):
 	Tier = Tiers[t]
 	for i in range(len(Tier)):
-		Tier[i] = Tier[i].replace(":", ";") # I hate Quarry (CS:S)
-		MapToTier[Tier[i]] = t+1
+		Fixed = Tier[i].replace(":", ";")
+		Full = Fixed + f" (T{t+1})"
+		Tier[i] = Full
+		MapToTier[Fixed] = t+1
+		MapToTier[Full] = t+1
 	for Map in Unreleased:
+		Map = Map + f" (T{t+1})"
 		if Map in Tier:
 			Tier.remove(Map)
+	# print(f"T{t+1}: {len(Tier)}")
 for i in range(len(Meme)):
-	Meme[i] = Meme[i].replace(":", ";") # I hate :3 too
+	Meme[i] = Meme[i].replace(":", ";")
+	Meme[i] = Meme[i] + f" (T{MapToTier[Meme[i]]})"
 for i in range(len(Tedious)):
 	Tedious[i] = Tedious[i].replace(":", ";")
+	Tedious[i] = Tedious[i] + f" (T{MapToTier[Tedious[i]]})"
